@@ -1,0 +1,24 @@
+Preliminary API Concepts for Single Entry Point (subject to change) - v 0.1
+
+GET - USED TO RETRIEVE DATA FROM THE SERVER
+
+GET /digital-twins/endpoints
+Retrieve a list of registered external RDF endpoints available for federated querying.
+
+GET /metadata/endpoints
+List available metadata repositories (internal and external).
+
+GET /digital-twins/{id}/contributors
+Retrieve a list of users or institutions that contributed to a specific Digital Twin.
+
+GET /digital-twins/{id}/history
+Retrieve the version history of a Digital Twin, including changes to metadata, structure, or linked media.
+
+GET /digital-twins/{id}/usage
+Show how often a Digital Twin has been accessed, used in tools, or cited.
+
+
+
+
+
+
