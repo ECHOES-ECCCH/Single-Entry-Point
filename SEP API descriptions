@@ -2,20 +2,150 @@ Preliminary API Concepts for Single Entry Point (subject to change) - v 0.1
 
 GET - USED TO RETRIEVE DATA FROM THE SERVER
 
+#
 GET /digital-twins/endpoints
 Retrieve a list of registered external RDF endpoints available for federated querying.
-
+#
 GET /metadata/endpoints
-List available metadata repositories (internal and external).
-
+List available metadata repositories (internal and external).#
 GET /digital-twins/{id}/contributors
 Retrieve a list of users or institutions that contributed to a specific Digital Twin.
-
+#
 GET /digital-twins/{id}/history
 Retrieve the version history of a Digital Twin, including changes to metadata, structure, or linked media.
-
+#
 GET /digital-twins/{id}/usage
 Show how often a Digital Twin has been accessed, used in tools, or cited.
+#
+GET /user-spaces/{id}/files
+
+Retrieve a list of files uploaded by the user.
+
+Potential Parameters:
+userId: The ID of the user requesting the files.
+fileType: Filter files by type (e.g. rdf, video, csv).
+visibility: Filter files by visibility (e.g., private, public).
+tags: Filter files by tags (e.g., Cyprus, 2025).
+createdAfter: Retrieve files created after a specific date.
+sortBy: Sort files by a specific attribute (e.g., uploadDate).
+order: Order of sorting (e.g., asc, desc).
+#
+GET /digital-twins
+
+Retrieve a list of Digital Twins based on a federated query across local and external RDF sources. 
+This allows users to discover Digital Twins not only stored in ECHOES but also in registered external endpoints.
+
+Potential Parameters:
+
+userId: The ID of the user requesting the Digital Twins.
+query: A SPARQL query used to retrieve Digital Twins across sources.
+sources: List of RDF sources to query (e.g., echoes, externalEndpoint1, externalEndpoint2).
+includeMetadata: Include metadata in the response.
+includeLinkedMedia: Include linked media in the response. 
+hasMedia: Filter Digital Twins that have associated media.
+
+##########################################################################################################################################
+POST - USED TO SEND NEW DATA TO THE SERVER
+
+POST /digital-twins/endpoints/register
+Register an external SPARQL endpoint for federated querying.
+
+Potential Parameters:
+userId: The ID of the user registering the endpoint.
+endpointUrl: URL of the external SPARQL endpoint.
+accessPolicy: Access policy for the endpoint (e.g., read-only, read-write).
+contactEmail: Contact email for the endpoint.
+supportedOntologies: List of supported ontologies for the endpoint.
+#
+POST - USED TO SEND NEW DATA TO THE SERVER
+
+POST /digital-twins/create
+
+Create a new Digital Twin using metadata from a local source or a federated endpoint. 
+The metadata is processed using a selected Virtual Application (VA), and the resulting 
+Digital Twin is stored either in ECHOES or in a registered external endpoint.
+
+Potential Parameters:
+userId: The ID of the user creating the Digital Twin
+metadataSource: Defines the source of metadata (e.g. local vs federated, SPARQL query to retrieve metadata)
+vaToolId: ID of the Virtual Application used to process the metadata
+storageTarget: Where to store the Digital Twin (local vs federated)
+visibility: Visibility of the Digital Twin (e.g., private, public).
+#
+POST /digital-twins/preview
+
+Process metadata using a selected Virtual Application (VA) to preview the resulting Digital Twin structure, 
+without saving it. Metadata can come from a local source or a federated endpoint.
+
+Potential Parameters:
+
+userId: The ID of the user requesting the preview.
+metadataSource: Defines the source of metadata.
+vaToolId: ID of the Virtual Application used to process the metadata.
+outputFormat: Desired format of the preview (e.g., JSON, RDF, TTL).
+#
+POST /digital-twins/{id}/enrich
+
+Enrich an existing Digital Twin with new data (RDF triples), metadata or media.
+
+Potential Parameters:
+userId: The ID of the user enriching the Digital Twin.
+twinId: ID of the Digital Twin to be enriched.
+data: Data to be added to the Digital Twin.
+media: Media files to be added to the Digital Twin.
+metadata: Metadata associated with the new data or media.
+visibility: Visibility of the new data or media (e.g., private, public).
+#
+PUT /digital-twins/{id}/update
+
+Update the content of an existing Digital Twin, including its RDF data, metadata, or linked media. 
+This endpoint replaces or modifies existing elements rather than adding new ones.
+
+Potential Parameters:
+
+userId: The ID of the user performing the update.
+twinId: ID of the Digital Twin to be updated.
+updatedData: RDF data to replace or modify existing content.
+updatedMetadata: Updated metadata fields (e.g., title, description, tags).
+updatedMedia: Updated or replaced media files.
+visibility: Updated visibility settings (e.g., private, public).
+changeNote: Optional description of the update for version tracking.
+#
+PUT /digital-twins/{id}/permissions
+
+Update access permissions for a Digital Twin.
+
+Potential Parameters:
+userId: The ID of the user updating the permissions.
+twinId: ID of the Digital Twin.
+permissions: New permissions for the Digital Twin.
+#
+POST /user-spaces/{id}/share
+
+Share a file or Digital Twin with another user or group of users.
+
+Potential Parameters:
+
+userId: The ID of the user sharing the resource.
+resourceId: The ID of the resource to be shared (e.g., file or Digital Twin).
+targetUserId: The ID of the user or group the resource is being shared with.
+permissions: Access level granted (e.g., read-only, read-write).
+expirationDate: Optional expiration date for the shared access.
+notify: Whether to notify the recipient (true/false).
+message: Optional message to include with the share action.
+#
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
